@@ -22,36 +22,29 @@ int cmp(void *a, void *b) {
     return *l < *r;
 }
 
-array_t *init_array(int len, int item_size) {
-    array_t *array = malloc(sizeof(array_t));
-    array->length = len;
-    array->item_size = item_size;
-    array->arr = malloc(len * item_size);
-
-    return array;
-}
-
-void set_elements(array_t *array, void *elements) {
+void test_sort(char *msg, array_t *array, void *elements,
+        void (*sort)(array_t *, cmp_t), cmp_t cmp) {
     memcpy(array->arr, elements, array->length * array->item_size);
+
+    printf("%s: \n", msg);
+    (*sort)(array, cmp);
+    print_array(array);
 }
 
 int main() {
     int n = random() % MAX;
-    array_t *array = init_array(n, sizeof(int));
-
     int *arr = malloc(n * sizeof(int));
     for (int i = 0; i < n; i++) {
         arr[i] = random() % MAX;
     }
-    set_elements(array, arr);
 
-    printf("selection_sort: \n");
-    selection_sort(array, cmp);
-    print_array(array);
+    array_t array = { .length = n, .item_size = sizeof(int),
+        .arr = malloc(n * sizeof(int))};
+
+    test_sort("selection_sort", &array, arr, selection_sort, cmp);
 
     free(arr);
-    free(array->arr);
-    free(array);
+    free(array.arr);
 
     return 0;
 }

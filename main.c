@@ -15,11 +15,8 @@ void print_array(array_t *array) {
     printf("}\n\n");
 }
 
-int cmp(void *a, void *b) {
-    int *l = a;
-    int *r = b;
-
-    return *l < *r;
+int cmp(const void *a, const void *b) {
+    return *((int *) a) < *((int *) b);
 }
 
 void test_sort(char *msg, array_t *array, void *elements,

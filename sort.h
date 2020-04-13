@@ -7,7 +7,7 @@ typedef struct array {
     size_t length;
 } array_t;
 
-typedef int (*cmp_t)(void *, void *);
+typedef int (*cmp_t)(const void *, const void *);
 
 void selection_sort(array_t *, cmp_t);
 void insertion_sort(array_t *, cmp_t);

@@ -42,6 +42,7 @@ int main() {
         .arr = malloc(n * sizeof(int))};
 
     test_sort("selection_sort", &array, arr, selection_sort, cmp);
+    test_sort("insertion_sort", &array, arr, insertion_sort, cmp);
 
     free(arr);
     free(array.arr);

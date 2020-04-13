@@ -10,5 +10,6 @@ typedef struct array {
 typedef int (*cmp_t)(void *, void *);
 
 void selection_sort(array_t *, cmp_t);
+void insertion_sort(array_t *, cmp_t);
 
 #endif // _SORT_H_

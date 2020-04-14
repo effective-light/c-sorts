@@ -11,7 +11,7 @@ static inline void swap(void *a, void *b, size_t size) {
     free(tmp);
 }
 
-void selection_sort(array_t *array, cmp_t cmp) {
+void selection_sort(array_t *array) {
     int n = array->length;
     int size = array->item_size;
     char *arr = array->arr;
@@ -23,7 +23,7 @@ void selection_sort(array_t *array, cmp_t cmp) {
         memcpy(b, (arr + size * jMin), size);
         for (int j = i + 1; j < n; j++) {
             memcpy(a, (arr + size * j), size);
-            if (cmp(a, b)) {
+            if (array->cmp(a, b)) {
                 jMin = j;
                 memcpy(b, (arr + size * jMin), size);
             }
@@ -37,7 +37,7 @@ void selection_sort(array_t *array, cmp_t cmp) {
     free(b);
 }
 
-void insertion_sort(array_t *array, cmp_t cmp) {
+void insertion_sort(array_t *array) {
     int size = array->item_size;
     char *arr = array->arr;
 
@@ -48,7 +48,7 @@ void insertion_sort(array_t *array, cmp_t cmp) {
         int j = i - 1;
         memcpy(x, (arr + i * size), size);
         memcpy(cur, (arr + j * size), size);
-        while (j >= 0 && cmp(x, cur)) {
+        while (j >= 0 && array->cmp(x, cur)) {
             memcpy(cur, (arr + j * size), size);
             memcpy((arr + (j + 1) * size), (arr + j * size), size);
             j--;

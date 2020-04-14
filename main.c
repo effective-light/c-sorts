@@ -20,11 +20,11 @@ int cmp(const void *a, const void *b) {
 }
 
 void test_sort(char *msg, array_t *array, void *elements,
-        void (*sort)(array_t *, cmp_t), cmp_t cmp) {
+        void (*sort)(array_t *)) {
     memcpy(array->arr, elements, array->length * array->item_size);
 
     printf("%s: \n", msg);
-    (*sort)(array, cmp);
+    (*sort)(array);
     print_array(array);
 }
 
@@ -36,10 +36,10 @@ int main() {
     }
 
     array_t array = { .length = n, .item_size = sizeof(int),
-        .arr = malloc(n * sizeof(int))};
+        .arr = malloc(n * sizeof(int)), .cmp = cmp};
 
-    test_sort("selection_sort", &array, arr, selection_sort, cmp);
-    test_sort("insertion_sort", &array, arr, insertion_sort, cmp);
+    test_sort("selection_sort", &array, arr, selection_sort);
+    test_sort("insertion_sort", &array, arr, insertion_sort);
 
     free(arr);
     free(array.arr);

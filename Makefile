@@ -1,4 +1,4 @@
-FLAGS = -Wall
+FLAGS = -Wextra
 
 main: main.o sort.o
 	gcc ${FLAGS} -o $@ $^

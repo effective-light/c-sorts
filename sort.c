@@ -41,7 +41,7 @@ void insertion_sort(array_t *array) {
     int size = array->item_size;
     char *arr = array->arr;
 
-    int i = 1;
+    size_t i = 1;
     void *x = malloc(size);
     void *cur = malloc(size);
     while (i < array->length) {
@@ -59,4 +59,40 @@ void insertion_sort(array_t *array) {
 
     free(x);
     free(cur);
+}
+
+static int partition(array_t *array, int l, int r) {
+    size_t size = array->item_size;
+    char *arr = array->arr;
+    void *pivot = malloc(size);
+    memcpy(pivot, (arr + r * size), size);
+
+    int i = l;
+    void *cur = malloc(size);
+    for (int j = l; j <= r; j++) {
+        memcpy(cur, (arr + j * size), size);
+        if (array->cmp(cur, pivot)) {
+            swap((arr + i * size), (arr + j * size), size);
+            i++;
+        }
+    }
+
+    swap((arr + i * size), (arr + r * size), size);
+
+    free(cur);
+    free(pivot);
+
+    return i;
+}
+
+static void _quicksort(array_t *array, int l, int r) {
+    if (l < r) {
+        int p = partition(array, l, r);
+        _quicksort(array, l, p - 1);
+        _quicksort(array, p + 1, r);
+    }
+}
+
+void quicksort(array_t *array) {
+    _quicksort(array, 0, array->length - 1);
 }

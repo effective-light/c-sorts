@@ -13,5 +13,6 @@ typedef struct array {
 
 void selection_sort(array_t *);
 void insertion_sort(array_t *);
+void quicksort(array_t *);
 
 #endif // _SORT_H_

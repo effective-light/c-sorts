@@ -9,10 +9,17 @@
 void print_array(array_t *array) {
     printf("{");
     int *arr = array->arr; // Assume int for simplicity
-    for (int i = 0; i < array->length; i++) {
+    int sorted = 1;
+    for (size_t i = 0; i < array->length; i++) {
+        if (sorted && i + 1 < array->length) {
+            if (!array->cmp(&arr[i], &arr[i + 1]) && arr[i] != arr[i + 1]) {
+                sorted = 0;
+            }
+        }
         printf(i + 1 != array->length ? "%d, " : "%d", arr[i]);
     }
-    printf("}\n\n");
+
+    printf("}\nsorted?: %s\n\n", sorted ? "true" : "false");
 }
 
 int cmp(const void *a, const void *b) {
@@ -24,7 +31,7 @@ void test_sort(char *msg, array_t *array, void *elements,
     memcpy(array->arr, elements, array->length * array->item_size);
 
     printf("%s: \n", msg);
-    (*sort)(array);
+    sort(array);
     print_array(array);
 }
 
@@ -40,6 +47,7 @@ int main() {
 
     test_sort("selection_sort", &array, arr, selection_sort);
     test_sort("insertion_sort", &array, arr, insertion_sort);
+    test_sort("quicksort", &array, arr, quicksort);
 
     free(arr);
     free(array.arr);

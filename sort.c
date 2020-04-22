@@ -12,24 +12,24 @@ static inline void swap(void *a, void *b, size_t size) {
 }
 
 void selection_sort(array_t *array) {
-    int n = array->length;
-    int size = array->item_size;
+    size_t n = array->length;
+    size_t size = array->item_size;
     char *arr = array->arr;
 
     void *a = malloc(size);
     void *b = malloc(size);
-    for (int i = 0; i < n - 1; i++) {
-        int jMin = i;
-        memcpy(b, (arr + size * jMin), size);
-        for (int j = i + 1; j < n; j++) {
+    for (size_t i = 0; i < n - 1; i++) {
+        size_t j_min = i;
+        memcpy(b, (arr + size * j_min), size);
+        for (size_t j = i + 1; j < n; j++) {
             memcpy(a, (arr + size * j), size);
             if (array->cmp(a, b)) {
-                jMin = j;
-                memcpy(b, (arr + size * jMin), size);
+                j_min = j;
+                memcpy(b, (arr + size * j_min), size);
             }
         }
-        if (jMin != i) {
-            swap((arr + size * i), (arr + size * jMin), size);
+        if (j_min != i) {
+            swap((arr + size * i), (arr + size * j_min), size);
         }
     }
 
@@ -38,38 +38,37 @@ void selection_sort(array_t *array) {
 }
 
 void insertion_sort(array_t *array) {
-    int size = array->item_size;
+    size_t size = array->item_size;
     char *arr = array->arr;
 
-    size_t i = 1;
     void *x = malloc(size);
     void *cur = malloc(size);
-    while (i < array->length) {
-        int j = i - 1;
+    for (size_t i = 1; i < array->length; i++) {
         memcpy(x, (arr + i * size), size);
-        memcpy(cur, (arr + j * size), size);
-        while (j >= 0 && array->cmp(x, cur)) {
-            memcpy(cur, (arr + j * size), size);
-            memcpy((arr + (j + 1) * size), (arr + j * size), size);
-            j--;
+        size_t j;
+        for (j = i; j; j--) {
+            memcpy(cur, (arr + (j - 1) * size), size);
+            if (!array->cmp(x, cur)) {
+                break;
+            }
+            memcpy((arr + j * size), cur, size);
         }
-        memcpy((arr + (j + 1) * size), x, size);
-        i++;
+        memcpy((arr + j * size), x, size);
     }
 
     free(x);
     free(cur);
 }
 
-static int partition(array_t *array, int l, int r) {
+static size_t partition(array_t *array, long l, long r) {
     size_t size = array->item_size;
     char *arr = array->arr;
     void *pivot = malloc(size);
     memcpy(pivot, (arr + r * size), size);
 
-    int i = l;
+    long i = l;
     void *cur = malloc(size);
-    for (int j = l; j <= r; j++) {
+    for (long j = l; j <= r; j++) {
         memcpy(cur, (arr + j * size), size);
         if (array->cmp(cur, pivot)) {
             swap((arr + i * size), (arr + j * size), size);
@@ -85,9 +84,9 @@ static int partition(array_t *array, int l, int r) {
     return i;
 }
 
-static void _quicksort(array_t *array, int l, int r) {
+static void _quicksort(array_t *array, long l, long r) {
     if (l < r) {
-        int p = partition(array, l, r);
+        size_t p = partition(array, l, r);
         _quicksort(array, l, p - 1);
         _quicksort(array, p + 1, r);
     }

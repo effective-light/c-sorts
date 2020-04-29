@@ -12,7 +12,7 @@ void print_array(array_t *array) {
     int sorted = 1;
     for (size_t i = 0; i < array->length; i++) {
         if (sorted && i + 1 < array->length) {
-            if (!array->cmp(&arr[i], &arr[i + 1]) && arr[i] != arr[i + 1]) {
+            if (array->cmp(&arr[i], &arr[i + 1]) > 0) {
                 sorted = 0;
             }
         }
@@ -23,7 +23,16 @@ void print_array(array_t *array) {
 }
 
 int cmp(const void *a, const void *b) {
-    return *((int *) a) < *((int *) b);
+    int left = *((int *) a);
+    int right = *((int *) b);
+
+    if (left < right) {
+        return -1;
+    } else if (left > right) {
+        return 1;
+    }
+
+    return 0;
 }
 
 void test_sort(char *msg, array_t *array, void *elements,

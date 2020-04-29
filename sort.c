@@ -23,7 +23,7 @@ void selection_sort(array_t *array) {
         memcpy(b, (arr + size * j_min), size);
         for (size_t j = i + 1; j < n; j++) {
             memcpy(a, (arr + size * j), size);
-            if (array->cmp(a, b)) {
+            if (array->cmp(a, b) < 0) {
                 j_min = j;
                 memcpy(b, (arr + size * j_min), size);
             }
@@ -48,7 +48,7 @@ void insertion_sort(array_t *array) {
         size_t j;
         for (j = i; j; j--) {
             memcpy(cur, (arr + (j - 1) * size), size);
-            if (!array->cmp(x, cur)) {
+            if (array->cmp(cur, x) < 0) {
                 break;
             }
             memcpy((arr + j * size), cur, size);
@@ -64,30 +64,38 @@ static size_t partition(array_t *array, long l, long r) {
     size_t size = array->item_size;
     char *arr = array->arr;
     void *pivot = malloc(size);
+    size_t index = l + (rand() % (r - l + 1));
+    swap((arr + r * size), (arr + index * size), size);
     memcpy(pivot, (arr + r * size), size);
 
-    long i = l;
+    size_t i = l - 1;
+    size_t j = r + 1;
     void *cur = malloc(size);
-    for (long j = l; j <= r; j++) {
-        memcpy(cur, (arr + j * size), size);
-        if (array->cmp(cur, pivot)) {
-            swap((arr + i * size), (arr + j * size), size);
+    for (;;) {
+        do {
             i++;
+            memcpy(cur, (arr + i * size), size);
+        } while (array->cmp(cur, pivot) < 0);
+
+        do {
+            j--;
+            memcpy(cur, (arr + j * size), size);
+        } while (array->cmp(cur, pivot) > 0);
+
+        if (j <= i) {
+            free(cur);
+            free(pivot);
+            return j;
         }
+
+        swap((arr + i * size), (arr + j * size), size);
     }
-
-    swap((arr + i * size), (arr + r * size), size);
-
-    free(cur);
-    free(pivot);
-
-    return i;
 }
 
 static void _quicksort(array_t *array, long l, long r) {
     if (l < r) {
         size_t p = partition(array, l, r);
-        _quicksort(array, l, p - 1);
+        _quicksort(array, l, p);
         _quicksort(array, p + 1, r);
     }
 }

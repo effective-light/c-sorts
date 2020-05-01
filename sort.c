@@ -60,7 +60,7 @@ void insertion_sort(array_t *array) {
     free(cur);
 }
 
-static size_t partition(array_t *array, long l, long r) {
+static size_t partition(array_t *array, size_t l, size_t r) {
     size_t size = array->item_size;
     char *arr = array->arr;
     void *pivot = malloc(size);
@@ -92,7 +92,7 @@ static size_t partition(array_t *array, long l, long r) {
     }
 }
 
-static void _quicksort(array_t *array, long l, long r) {
+static void _quicksort(array_t *array, size_t l, size_t r) {
     if (l < r) {
         size_t p = partition(array, l, r);
         _quicksort(array, l, p);
@@ -102,4 +102,60 @@ static void _quicksort(array_t *array, long l, long r) {
 
 void quicksort(array_t *array) {
     _quicksort(array, 0, array->length - 1);
+}
+
+static void merge(array_t *array, size_t l, size_t m, size_t r) {
+    char *arr = array->arr;
+    size_t size = array->item_size;
+
+    size_t index = l;
+    size_t i = 0;
+    size_t j = 0;
+    size_t left_size = m - l + 1;
+    size_t right_size = r - m;
+
+    void *a = malloc(size);
+    void *b = malloc(size);
+    void *left = malloc(size * left_size);
+    void *right = malloc(size * right_size);
+    memcpy(left, (arr + l * size), left_size * size);
+    memcpy(right, (arr + (m + 1) * size), right_size * size);
+    while (i < left_size && j < right_size) {
+        memcpy(a, (left + i * size), size);
+        memcpy(b, (right + j * size), size);
+        if (array->cmp(a, b) <= 0) {
+            memcpy((arr + index * size), a, size);
+            i++;
+        } else {
+            memcpy((arr + index * size), b, size);
+            j++;
+        }
+        index++;
+    }
+
+    while (i < left_size) {
+        memcpy((arr + (index++) * size), (left + (i++) * size), size);
+    }
+
+    while (j < right_size) {
+        memcpy((arr + (index++) * size), (right + (j++) * size), size);
+    }
+
+    free(a);
+    free(b);
+    free(left);
+    free(right);
+}
+
+static void _mergesort(array_t *array, size_t l, size_t r) {
+    if (l < r) {
+        size_t m = (l + r) / 2;
+        _mergesort(array, l, m);
+        _mergesort(array, m + 1, r);
+        merge(array, l, m, r);
+    }
+}
+
+void mergesort(array_t *array) {
+    _mergesort(array, 0, array->length - 1);
 }

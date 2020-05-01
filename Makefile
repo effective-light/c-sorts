@@ -1,4 +1,4 @@
-FLAGS = -Wextra
+FLAGS = -Wextra -g
 
 main: main.o sort.o
 	gcc ${FLAGS} -o $@ $^

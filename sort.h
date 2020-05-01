@@ -10,9 +10,9 @@ typedef struct array {
     cmp_t cmp;
 } array_t;
 
-
 void selection_sort(array_t *);
 void insertion_sort(array_t *);
 void quicksort(array_t *);
+void mergesort(array_t *);
 
 #endif // _SORT_H_

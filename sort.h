@@ -1,7 +1,7 @@
 #ifndef _SORT_H_
 #define _SORT_H_
 
-typedef int (*cmp_t)(const void *, const void *);
+#include "cmp.h"
 
 typedef struct array {
     void *arr;

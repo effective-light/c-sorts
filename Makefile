@@ -1,6 +1,6 @@
 FLAGS = -Wextra -g
 
-main: main.o sort.o
+main: main.o cmp.o sort.o
 	gcc ${FLAGS} -o $@ $^
 
 %.o: %.c

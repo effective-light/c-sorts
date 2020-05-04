@@ -3,14 +3,6 @@
 
 #include "sort.h"
 
-static inline void swap(void *a, void *b, size_t size) {
-    void *tmp = malloc(size);
-    memcpy(tmp, a, size);
-    memcpy(a, b, size);
-    memcpy(b, tmp, size);
-    free(tmp);
-}
-
 void selection_sort(array_t *array) {
     size_t n = array->length;
     size_t size = array->item_size;

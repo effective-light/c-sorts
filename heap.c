@@ -89,6 +89,35 @@ void *heap_pop(heap_t *heap) {
     return top;
 }
 
+void heap_change_key(heap_t *heap, size_t index) {
+
+    char *arr = heap->data;
+    size_t size = heap->item_size;
+
+    void *a = malloc(size);
+    void *b = malloc(size);
+    while (index >= 1) {
+        memcpy(a, (arr + parent(index) * size), size);
+        memcpy(b, (arr + index * size), size);
+        if (heap->cmp(a, b) >= 0) {
+            break;
+        }
+        swap((arr + parent(index) * size), (arr + index * size), size);
+        index = parent(index);
+    }
+
+    free(a);
+    free(b);
+}
+
 void heap_insert(heap_t *heap, void *item) {
-    
+   if (heap->size + 1 < heap->capacity) {
+       heap->capacity *= 2;
+       heap->data = reallocarray(heap->data, heap->item_size, heap->capacity);
+   }
+
+   memcpy((char *) (heap->data + heap->size * heap->item_size),
+           item, heap->item_size);
+   heap_change_key(heap, heap->size);
+   heap->size++;
 }

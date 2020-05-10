@@ -89,7 +89,7 @@ void *heap_pop(heap_t *heap) {
     return top;
 }
 
-void heap_change_key(heap_t *heap, size_t index) {
+static void heap_change_key(heap_t *heap, size_t index) {
 
     char *arr = heap->data;
     size_t size = heap->item_size;
@@ -120,4 +120,19 @@ void heap_insert(heap_t *heap, void *item) {
            item, heap->item_size);
    heap_change_key(heap, heap->size);
    heap->size++;
+}
+
+heap_t *heap_build(void *arr, size_t item_size, size_t size, cmp_t cmp) {
+    heap_t *heap = malloc(sizeof(heap_t));
+    heap->item_size = item_size;
+    heap->size = size;
+    heap->data = arr;
+    heap->capacity = size;
+    heap->cmp = cmp;
+
+    for (size_t i = size / 2 + 1; i; i--) {
+        heapify(heap, i - 1);
+    }
+
+    free(heap);
 }

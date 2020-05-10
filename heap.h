@@ -15,5 +15,6 @@ heap_t *heap_init(size_t, cmp_t);
 void *heap_top(heap_t *);
 void *heap_pop(heap_t *);
 void heap_insert(heap_t *, void *);
+heap_t *heap_build(void *, size_t, size_t, cmp_t);
 
 #endif // _HEAP_H_

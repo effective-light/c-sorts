@@ -52,14 +52,14 @@ void heapify(heap_t *heap, size_t index) {
 
     void *a = get_item(heap, index);
     void *b = get_item(heap, l);
-    if (b && heap->cmp(b, a) < 0) {
+    if (b && heap->cmp(b, a) > 0) {
         memcpy(a, b, size);
         target = l;
     }
 
     free(b);
     b = get_item(heap, r);
-    if (b && heap->cmp(b, a) < 0) {
+    if (b && heap->cmp(b, a) > 0) {
         target = r;
     }
 
@@ -134,5 +134,5 @@ heap_t *heap_build(void *arr, size_t item_size, size_t size, cmp_t cmp) {
         heapify(heap, i - 1);
     }
 
-    free(heap);
+    return heap;
 }

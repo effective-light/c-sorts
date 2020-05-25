@@ -157,9 +157,11 @@ void heapsort(array_t *array) {
     char *arr = array->arr;
     size_t size = array->item_size;
     heap_t *heap = heap_build(array->arr, size, array->length, array->cmp);
-    for (size_t i = array->length; i > 0; i--) {
+    for (size_t i = array->length - 1; i; i--) {
         swap(arr, (arr + i * size), size);
         heap->size--;
-        heapify(heap, i);
+        heapify(heap, 0);
     }
+
+    free(heap);
 }

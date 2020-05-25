@@ -54,9 +54,10 @@ int main() {
     array_t array = { .length = n, .item_size = sizeof(int),
         .arr = malloc(n * sizeof(int)), .cmp = cmp};
 
-    char *names[] = {"selection_sort", "insertion_sort", "quicksort", "mergesort"};
-    void *prototypes[] = {selection_sort, insertion_sort, quicksort, mergesort};
-    for (int i = 0; i < 4; i++) {
+    char *names[] = {"selection_sort", "insertion_sort", "quicksort", "mergesort",
+        "heapsort"};
+    void *prototypes[] = {selection_sort, insertion_sort, quicksort, mergesort, heapsort};
+    for (int i = 0; i < 5; i++) {
         test_sort(names[i], &array, arr, (void (*)(array_t *)) prototypes[i]);
     }
 

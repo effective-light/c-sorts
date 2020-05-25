@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "heap.h"
 #include "sort.h"
 
 void selection_sort(array_t *array) {
@@ -150,4 +151,15 @@ static void _mergesort(array_t *array, size_t l, size_t r) {
 
 void mergesort(array_t *array) {
     _mergesort(array, 0, array->length - 1);
+}
+
+void heapsort(array_t *array) {
+    char *arr = array->arr;
+    size_t size = array->item_size;
+    heap_t *heap = heap_build(array->arr, size, array->length, array->cmp);
+    for (size_t i = array->length; i > 0; i--) {
+        swap(arr, (arr + i * size), size);
+        heap->size--;
+        heapify(heap, i);
+    }
 }

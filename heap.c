@@ -43,7 +43,7 @@ void *heap_top(heap_t *heap) {
     return get_item(heap, 0);
 }
 
-static void heapify(heap_t *heap, size_t index) {
+void heapify(heap_t *heap, size_t index) {
     size_t size = heap->item_size;
     char *arr = heap->data;
     size_t l = left(index);

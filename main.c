@@ -1,7 +1,8 @@
-#include <stdio.h>
+# include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "heap.h"
 #include "sort.h"
 
 #define MAX 500
@@ -35,11 +36,28 @@ int cmp(const void *a, const void *b) {
     return 0;
 }
 
+void test_heap(void *elements, size_t length) {
+    heap_t *heap = heap_init(sizeof(int), cmp);
+    for (size_t i = 0; i < length; i++) {
+        heap_insert(heap, (elements + i * heap->item_size));
+    }
+
+    printf("heap:\n");
+    while (heap->size) {
+        int *min = heap_pop(heap);
+        printf("%d, ", (int) *min);
+        free(min);
+    }
+    printf("\n");
+    free(heap->data);
+    free(heap);
+}
+
 void test_sort(char *msg, array_t *array, void *elements,
         void (*sort)(array_t *)) {
     memcpy(array->arr, elements, array->length * array->item_size);
 
-    printf("%s: \n", msg);
+    printf("%s:\n", msg);
     sort(array);
     print_array(array);
 }
@@ -51,12 +69,15 @@ int main() {
         arr[i] = random() % MAX;
     }
 
+    test_heap(arr, 10);
+
     array_t array = { .length = n, .item_size = sizeof(int),
         .arr = malloc(n * sizeof(int)), .cmp = cmp};
 
-    char *names[] = {"selection_sort", "insertion_sort", "quicksort", "mergesort",
-        "heapsort"};
-    void *prototypes[] = {selection_sort, insertion_sort, quicksort, mergesort, heapsort};
+    char *names[] = {"selection_sort", "insertion_sort", "quicksort",
+        "mergesort", "heapsort"};
+    void *prototypes[] = {selection_sort, insertion_sort, quicksort, mergesort,
+        heapsort};
     for (int i = 0; i < 5; i++) {
         test_sort(names[i], &array, arr, (void (*)(array_t *)) prototypes[i]);
     }

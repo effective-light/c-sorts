@@ -52,14 +52,14 @@ void heapify(heap_t *heap, size_t index) {
 
     void *a = get_item(heap, index);
     void *b = get_item(heap, l);
-    if (b && heap->cmp(b, a) > 0) {
+    if (b && heap->cmp(a, b) > 0) {
         memcpy(a, b, size);
         target = l;
     }
 
     free(b);
     b = get_item(heap, r);
-    if (b && heap->cmp(b, a) > 0) {
+    if (b && heap->cmp(a, b) > 0) {
         target = r;
     }
 
@@ -79,11 +79,10 @@ void *heap_pop(heap_t *heap) {
     }
 
     void *top = heap_top(heap);
-    char *arr = heap->data;
     size_t size = heap->item_size;
 
-    memcpy(heap->data, (arr + (heap->size - 1) * size), size);
     heap->size--;
+    memcpy(heap->data, ((char *) heap->data + heap->size * size), size);
     heapify(heap, 0);
 
     return top;
@@ -99,7 +98,7 @@ static void heap_change_key(heap_t *heap, size_t index) {
     while (index >= 1) {
         memcpy(a, (arr + parent(index) * size), size);
         memcpy(b, (arr + index * size), size);
-        if (heap->cmp(a, b) >= 0) {
+        if (heap->cmp(a, b) <= 0) {
             break;
         }
         swap((arr + parent(index) * size), (arr + index * size), size);
@@ -111,7 +110,7 @@ static void heap_change_key(heap_t *heap, size_t index) {
 }
 
 void heap_insert(heap_t *heap, void *item) {
-   if (heap->size + 1 < heap->capacity) {
+   if (heap->size == heap->capacity) {
        heap->capacity *= 2;
        heap->data = reallocarray(heap->data, heap->item_size, heap->capacity);
    }

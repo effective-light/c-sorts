@@ -43,7 +43,7 @@ void *heap_top(heap_t *heap) {
     return get_item(heap, 0);
 }
 
-void heapify(heap_t *heap, size_t index) {
+void heapify(heap_t *heap, size_t index, bool type) {
     size_t size = heap->item_size;
     char *arr = heap->data;
     size_t l = left(index);
@@ -52,14 +52,14 @@ void heapify(heap_t *heap, size_t index) {
 
     void *a = get_item(heap, index);
     void *b = get_item(heap, l);
-    if (b && heap->cmp(a, b) > 0) {
+    if (b && (type ? heap->cmp(a, b) > 0 : heap->cmp(a, b) < 0)) {
         memcpy(a, b, size);
         target = l;
     }
 
     free(b);
     b = get_item(heap, r);
-    if (b && heap->cmp(a, b) > 0) {
+    if (b && (type ? heap->cmp(a, b) > 0 : heap->cmp(a, b) < 0)) {
         target = r;
     }
 
@@ -68,7 +68,7 @@ void heapify(heap_t *heap, size_t index) {
 
     if (target != index) {
         swap((arr + index * size), (arr + target * size), size);
-        heapify(heap, target);
+        heapify(heap, target, type);
     }
 
 }
@@ -83,7 +83,7 @@ void *heap_pop(heap_t *heap) {
 
     heap->size--;
     memcpy(heap->data, ((char *) heap->data + heap->size * size), size);
-    heapify(heap, 0);
+    heapify(heap, 0, true);
 
     return top;
 }
@@ -130,7 +130,7 @@ heap_t *heap_build(void *arr, size_t item_size, size_t size, cmp_t cmp) {
     heap->cmp = cmp;
 
     for (size_t i = size / 2 + 1; i; i--) {
-        heapify(heap, i - 1);
+        heapify(heap, i - 1, false);
     }
 
     return heap;

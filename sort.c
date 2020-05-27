@@ -160,7 +160,7 @@ void heapsort(array_t *array) {
     for (size_t i = array->length - 1; i; i--) {
         swap(arr, (arr + i * size), size);
         heap->size--;
-        heapify(heap, 0);
+        heapify(heap, 0, false);
     }
 
     free(heap);

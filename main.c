@@ -42,13 +42,13 @@ void test_heap(void *elements, size_t length) {
         heap_insert(heap, (elements + i * heap->item_size));
     }
 
-    printf("heap:\n");
+    printf("heap (size %d):\n{", length);
     while (heap->size) {
         int *min = heap_pop(heap);
-        printf("%d, ", (int) *min);
+        printf(heap->size != 0 ? "%d, " : "%d", (int) *min);
         free(min);
     }
-    printf("\n");
+    printf("}\n\n");
     free(heap->data);
     free(heap);
 }

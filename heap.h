@@ -16,6 +16,6 @@ void *heap_top(heap_t *);
 void *heap_pop(heap_t *);
 void heap_insert(heap_t *, void *);
 heap_t *heap_build(void *, size_t, size_t, cmp_t);
-void heapify(heap_t *, size_t);
+void heapify(heap_t *, size_t, bool);
 
 #endif // _HEAP_H_
